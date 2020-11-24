@@ -17,7 +17,7 @@ const render = (container, template, place = `beforeend`) => {
 
 const tripMainElement = document.querySelector(`.trip-main`);
 
-render(tripMainElement, createInfoCostSectionTemplate());
+render(tripMainElement, createInfoCostSectionTemplate(),'afterbegin');
 
 const tripInfoCostSectionElement = tripMainElement.querySelector(`.trip-info`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
