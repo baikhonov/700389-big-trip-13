@@ -1,13 +1,13 @@
-import {createInfoCostSectionTemplate} from "./views/info-cost-section.js";
-import {createInfoTemplate} from "./views/info.js";
-import {createCostTemplate} from "./views/cost.js";
-import {createMenuTemplate} from "./views/menu.js";
-import {createFiltersTemplate} from "./views/filters.js";
-import {createSortingTemplate} from "./views/sorting.js";
-import {createEventsListTemplate} from "./views/events-list.js";
-import {createFormCreateTemplate} from "./views/event-create.js";
-import {createFormEditTemplate} from "./views/event-edit.js";
-import {createEventTemplate} from "./views/event.js";
+import {createInfoCostSectionTemplate} from "./views/info-cost-section";
+import {createInfoTemplate} from "./views/info";
+import {createCostTemplate} from "./views/cost";
+import {createMenuTemplate} from "./views/menu";
+import {createFiltersTemplate} from "./views/filters";
+import {createSortingTemplate} from "./views/sorting";
+import {createEventsListTemplate} from "./views/events-list";
+import {createFormCreateTemplate} from "./views/event-create";
+import {createFormEditTemplate} from "./views/event-edit";
+import {createEventTemplate} from "./views/event";
 
 const EVENT_COUNT = 3;
 
