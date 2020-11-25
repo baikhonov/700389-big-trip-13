@@ -1,13 +1,13 @@
 import {createInfoCostSectionTemplate} from "./views/info-cost-section.js";
-import {createTripInfoTemplate} from "./views/info.js";
-import {createTripCostTemplate} from "./views/cost.js";
-import {createTripMenuTemplate} from "./views/menu.js";
-import {createTripFiltersTemplate} from "./views/filters.js";
-import {createTripSortingTemplate} from "./views/sorting.js";
-import {createTripEventsListTemplate} from "./views/events-list.js";
-import {createTripFormCreateTemplate} from "./views/event-create.js";
-import {createTripFormEditTemplate} from "./views/event-edit.js";
-import {createTripEventTemplate} from "./views/event.js";
+import {createInfoTemplate} from "./views/info.js";
+import {createCostTemplate} from "./views/cost.js";
+import {createMenuTemplate} from "./views/menu.js";
+import {createFiltersTemplate} from "./views/filters.js";
+import {createSortingTemplate} from "./views/sorting.js";
+import {createEventsListTemplate} from "./views/events-list.js";
+import {createFormCreateTemplate} from "./views/event-create.js";
+import {createFormEditTemplate} from "./views/event-edit.js";
+import {createEventTemplate} from "./views/event.js";
 
 const EVENT_COUNT = 3;
 
@@ -23,18 +23,18 @@ const tripInfoCostSectionElement = tripMainElement.querySelector(`.trip-info`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripEventsElement = document.querySelector(`.trip-events`);
 
-render(tripInfoCostSectionElement, createTripInfoTemplate());
-render(tripInfoCostSectionElement, createTripCostTemplate());
-render(tripControlsElement, createTripMenuTemplate());
-render(tripControlsElement, createTripFiltersTemplate());
-render(tripEventsElement, createTripSortingTemplate());
-render(tripEventsElement, createTripEventsListTemplate());
+render(tripInfoCostSectionElement, createInfoTemplate());
+render(tripInfoCostSectionElement, createCostTemplate());
+render(tripControlsElement, createMenuTemplate());
+render(tripControlsElement, createFiltersTemplate());
+render(tripEventsElement, createSortingTemplate());
+render(tripEventsElement, createEventsListTemplate());
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
-render(tripEventsListElement, createTripFormCreateTemplate());
-render(tripEventsListElement, createTripFormEditTemplate());
+render(tripEventsListElement, createFormCreateTemplate());
+render(tripEventsListElement, createFormEditTemplate());
 for (let i = 0; i < EVENT_COUNT; i++) {
-  render(tripEventsListElement, createTripEventTemplate());
+  render(tripEventsListElement, createEventTemplate());
 }
 

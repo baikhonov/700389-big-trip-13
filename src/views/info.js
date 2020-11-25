@@ -1,4 +1,4 @@
-export const createTripInfoTemplate = () => {
+export const createInfoTemplate = () => {
   return `<div class="trip-info__main">
               <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
 
