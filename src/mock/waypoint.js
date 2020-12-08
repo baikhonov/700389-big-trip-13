@@ -103,7 +103,7 @@ const generateImages = () => {
 };
 
 const generateBeginDate = () => {
-  const maxDaysGap = 2;
+  const maxDaysGap = 7;
   const maxHourGap = 24;
   const maxMinuteGap = 60;
   const daysGap = getRandomInteger(-maxDaysGap, -1);
@@ -114,7 +114,7 @@ const generateBeginDate = () => {
 };
 
 const generateEndDate = () => {
-  const maxDaysGap = 2;
+  const maxDaysGap = 7;
   const maxHourGap = 24;
   const maxMinuteGap = 60;
   const daysGap = getRandomInteger(0, maxDaysGap);

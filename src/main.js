@@ -26,8 +26,8 @@ const tripInfoCostSectionElement = tripMainElement.querySelector(`.trip-info`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripEventsElement = document.querySelector(`.trip-events`);
 
-render(tripInfoCostSectionElement, createInfoTemplate());
-render(tripInfoCostSectionElement, createCostTemplate());
+render(tripInfoCostSectionElement, createInfoTemplate(events));
+render(tripInfoCostSectionElement, createCostTemplate(events));
 render(tripControlsElement, createMenuTemplate());
 render(tripControlsElement, createFiltersTemplate());
 render(tripEventsElement, createSortingTemplate());
