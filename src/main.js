@@ -8,8 +8,11 @@ import {createEventsListTemplate} from "./views/events-list";
 import {createFormCreateTemplate} from "./views/event-create";
 import {createFormEditTemplate} from "./views/event-edit";
 import {createEventTemplate} from "./views/event";
+import {generateWaypoint} from "./mock/waypoint";
 
-const EVENT_COUNT = 3;
+const EVENT_COUNT = 20;
+
+const events = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -35,6 +38,6 @@ const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__lis
 render(tripEventsListElement, createFormCreateTemplate());
 render(tripEventsListElement, createFormEditTemplate());
 for (let i = 0; i < EVENT_COUNT; i++) {
-  render(tripEventsListElement, createEventTemplate());
+  render(tripEventsListElement, createEventTemplate(events[i]));
 }
 
