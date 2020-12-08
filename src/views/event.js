@@ -2,12 +2,12 @@ import dayjs from "dayjs";
 
 const createEventOffersTemplate = (offers) => {
   let outputOffers = [];
-  for (const pair of offers) {
+  for (const offer of offers) {
     outputOffers.push(`
       <li class="event__offer">
-            <span class="event__offer-title">${pair[0]}</span>
+            <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">${pair[1]}</span>
+            <span class="event__offer-price">${offer.price}</span>
           </li>
     `);
   }
@@ -20,7 +20,7 @@ export const createEventTemplate = (event) => {
     destination,
     offers,
     description,
-    photos,
+    image,
     beginDate,
     endDate,
     price,
@@ -79,7 +79,6 @@ export const createEventTemplate = (event) => {
   //
   //   return duration;
   // };
-
 
   const favoriteClassName = isFavorite
     ? `event__favorite-btn--active`

@@ -46,20 +46,42 @@ const generateDestination = () => {
 };
 
 const generateOffers = () => {
-  const offersList = [
-    `Add luggage`,
-    `Switch to comfort`,
-    `Add meal`,
-    `Choose seats`,
-    `Travel by train`,
+  const offersTitleList = [
+    {
+      alias: `luggage`,
+      title: `Add luggage`,
+    },
+    {
+      alias: `comfort`,
+      title: `Switch to comfort`,
+    },
+    {
+      alias: `meal`,
+      title: `Add meal`,
+    },
+    {
+      alias: `seats`,
+      title: `Choose seats`,
+    },
+    {
+      alias: `train`,
+      title: `Travel by train`,
+    }
   ];
 
   const randomLength = getRandomInteger(0, 5);
 
-  let offers = new Map();
+  let offers = [];
   for (let i = 0; i < randomLength; i++) {
-    const randomIndex = getRandomInteger(0, offersList.length - 1);
-    offers.set(offersList[randomIndex], getRandomInteger(1, 100));
+    const randomIndex = getRandomInteger(0, offersTitleList.length - 1);
+    const randomElement = offersTitleList.splice(randomIndex, 1);
+    const randomOffer = {
+      alias: randomElement[0].alias,
+      title: randomElement[0].title,
+      price: getRandomInteger(0, 100),
+      isChecked: Boolean(getRandomInteger(0, 1))
+    };
+    offers.push(randomOffer);
   }
 
   return offers;
@@ -85,17 +107,17 @@ const generateDescription = () => {
   return description;
 };
 
-const generatePhotos = () => {
-  const photo = `http://picsum.photos/248/152?r=`;
+const generateImages = () => {
+  const image = `http://picsum.photos/248/152?r=`;
   const randomLength = getRandomInteger(0, 5);
 
-  let photos = [];
+  let images = [];
   for (let i = 0; i < randomLength; i++) {
     const randomNumber = getRandomInteger(1, 100);
-    photos.push(photo + randomNumber);
+    images.push(image + randomNumber);
   }
 
-  return photos;
+  return images;
 };
 
 const generateBeginDate = () => {
@@ -130,7 +152,7 @@ export const generateWaypoint = () => {
     destination: generateDestination(),
     offers: generateOffers(),
     description: generateDescription(),
-    photos: generatePhotos(),
+    images: generateImages(),
     beginDate: generateBeginDate(),
     endDate: generateEndDate(),
     price: generatePrice(),

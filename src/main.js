@@ -13,7 +13,6 @@ import {generateWaypoint} from "./mock/waypoint";
 const EVENT_COUNT = 20;
 
 const events = new Array(EVENT_COUNT).fill().map(generateWaypoint);
-console.log(events);
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
