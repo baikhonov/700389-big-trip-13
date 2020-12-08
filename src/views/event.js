@@ -1,15 +1,85 @@
 import dayjs from "dayjs";
 
+const createEventOffersTemplate = (offers) => {
+  let outputOffers = [];
+  for (const pair of offers) {
+    outputOffers.push(`
+      <li class="event__offer">
+            <span class="event__offer-title">${pair[0]}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${pair[1]}</span>
+          </li>
+    `);
+  }
+  return outputOffers.join(``);
+};
+
 export const createEventTemplate = (event) => {
-  const {type, destination, options, description, photos, beginDate, endDate, price, isFavorite} = event;
+  const {
+    type,
+    destination,
+    offers,
+    description,
+    photos,
+    beginDate,
+    endDate,
+    price,
+    isFavorite
+  } = event;
 
-  const date = beginDate !== null
-    ? dayjs(beginDate).format(`MMM D`)
-    : ``;
+  const offersTemplate = createEventOffersTemplate(offers);
 
-  const dateForMachine = beginDate !== null
-    ? dayjs(beginDate).format(`YYYY-MM-DD`)
-    : ``;
+  const date = (incomeDate) => {
+    const outputDate = incomeDate !== null
+      ? dayjs(incomeDate).format(`MMM D`)
+      : ``;
+
+    return outputDate;
+  };
+
+
+  const dateForMachine = (incomeDate) => {
+    const outputDate = incomeDate !== null
+      ? dayjs(incomeDate).format(`YYYY-MM-DD`)
+      : ``;
+
+    return outputDate;
+  };
+
+  const time = (incomeDate) => {
+    const outputDate = incomeDate !== null
+      ? dayjs(incomeDate).format(`HH:mm`)
+      : ``;
+
+    return outputDate;
+  };
+
+  const timeForMachine = (incomeDate) => {
+    const outputDate = incomeDate !== null
+      ? dayjs(incomeDate).format(`YYYY-MM-DDTHH:mm`)
+      : ``;
+
+    return outputDate;
+  };
+
+  // const calculateDuration = (firstDate, secondDate) => {
+  //   const date1 = dayjs(firstDate);
+  //   const date2 = dayjs(secondDate);
+  //   const diff = date2.diff(date1, `minute`);
+  //   let duration = ``;
+  //   if (diff < 59) {
+  //     duration = date2.diff(date1, `minute`) + 'M';
+  //   }
+  //   if (diff < 1440 && diff > 59) {
+  //     duration = date2.diff(date1, `hour`) + 'H';
+  //   }
+  //   if (diff > 1440) {
+  //     duration = date2.diff(date1, `day`) + 'D';
+  //   }
+  //
+  //   return duration;
+  // };
+
 
   const favoriteClassName = isFavorite
     ? `event__favorite-btn--active`
@@ -18,16 +88,16 @@ export const createEventTemplate = (event) => {
   return `
     <li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="${dateForMachine}">${date}</time>
+        <time class="event__date" datetime="${dateForMachine(beginDate)}">${date(beginDate)}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type} ${destination}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+            <time class="event__start-time" datetime="${timeForMachine(beginDate)}">${time(beginDate)}</time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+            <time class="event__end-time" datetime="${timeForMachine(endDate)}">${time(endDate)}</time>
           </p>
           <p class="event__duration">30M</p>
         </div>
@@ -36,11 +106,7 @@ export const createEventTemplate = (event) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Order Uber</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">20</span>
-          </li>
+          ${offersTemplate}
         </ul>
         <button class="event__favorite-btn ${favoriteClassName}" type="button">
           <span class="visually-hidden">Add to favorite</span>

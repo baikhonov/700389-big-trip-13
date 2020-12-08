@@ -45,8 +45,8 @@ const generateDestination = () => {
   return destinations[randomIndex];
 };
 
-const generateOptions = () => {
-  const optionsList = [
+const generateOffers = () => {
+  const offersList = [
     `Add luggage`,
     `Switch to comfort`,
     `Add meal`,
@@ -56,13 +56,13 @@ const generateOptions = () => {
 
   const randomLength = getRandomInteger(0, 5);
 
-  let options = new Map();
+  let offers = new Map();
   for (let i = 0; i < randomLength; i++) {
-    const randomIndex = getRandomInteger(0, optionsList.length - 1);
-    options.set(optionsList[randomIndex], getRandomInteger(1, 1000));
+    const randomIndex = getRandomInteger(0, offersList.length - 1);
+    offers.set(offersList[randomIndex], getRandomInteger(1, 100));
   }
 
-  return options;
+  return offers;
 };
 
 const generateDescription = () => {
@@ -73,7 +73,9 @@ const generateDescription = () => {
     `Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat.`,
     `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`,
   ];
+
   const randomLength = getRandomInteger(0, 5);
+
   let description = [];
   for (let i = 0; i < randomLength; i++) {
     const randomIndex = getRandomInteger(0, sentences.length - 1);
@@ -96,26 +98,41 @@ const generatePhotos = () => {
   return photos;
 };
 
-const generateDate = () => {
+const generateBeginDate = () => {
   const maxDaysGap = 7;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+  const maxHourGap = 24;
+  const maxMinuteGap = 60;
+  const daysGap = getRandomInteger(-maxDaysGap, 0);
+  const hourGap = getRandomInteger(-maxHourGap, 0);
+  const minuteGap = getRandomInteger(-maxMinuteGap, 0);
 
-  return dayjs().add(daysGap, `day`).toDate();
+  return dayjs().add(daysGap, `day`).add(hourGap, `hour`).add(minuteGap, `minute`).toDate();
+};
+
+const generateEndDate = () => {
+  const maxDaysGap = 7;
+  const maxHourGap = 24;
+  const maxMinuteGap = 60;
+  const daysGap = getRandomInteger(0, maxDaysGap);
+  const hourGap = getRandomInteger(-maxHourGap, 0);
+  const minuteGap = getRandomInteger(-maxMinuteGap, 0);
+
+  return dayjs().add(daysGap, `day`).add(hourGap, `hour`).add(minuteGap, `minute`).toDate();
 };
 
 const generatePrice = () => {
-  return getRandomInteger(1, 10000);
+  return getRandomInteger(1, 1000);
 };
 
 export const generateWaypoint = () => {
   return {
     type: generateType(),
     destination: generateDestination(),
-    options: generateOptions(),
+    offers: generateOffers(),
     description: generateDescription(),
     photos: generatePhotos(),
-    beginDate: generateDate(),
-    endDate: generateDate(),
+    beginDate: generateBeginDate(),
+    endDate: generateEndDate(),
     price: generatePrice(),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };

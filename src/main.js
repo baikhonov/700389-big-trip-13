@@ -13,6 +13,7 @@ import {generateWaypoint} from "./mock/waypoint";
 const EVENT_COUNT = 20;
 
 const events = new Array(EVENT_COUNT).fill().map(generateWaypoint);
+console.log(events);
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -35,9 +36,9 @@ render(tripEventsElement, createEventsListTemplate());
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
-render(tripEventsListElement, createFormCreateTemplate());
-render(tripEventsListElement, createFormEditTemplate());
-for (let i = 0; i < EVENT_COUNT; i++) {
+render(tripEventsListElement, createFormCreateTemplate(events[0]));
+render(tripEventsListElement, createFormEditTemplate(events[1]));
+for (let i = 2; i < EVENT_COUNT; i++) {
   render(tripEventsListElement, createEventTemplate(events[i]));
 }
 
