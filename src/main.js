@@ -1,15 +1,18 @@
-import {createInfoCostSectionTemplate} from "./views/info-cost-section.js";
-import {createTripInfoTemplate} from "./views/info.js";
-import {createTripCostTemplate} from "./views/cost.js";
-import {createTripMenuTemplate} from "./views/menu.js";
-import {createTripFiltersTemplate} from "./views/filters.js";
-import {createTripSortingTemplate} from "./views/sorting.js";
-import {createTripEventsListTemplate} from "./views/events-list.js";
-import {createTripFormCreateTemplate} from "./views/event-create.js";
-import {createTripFormEditTemplate} from "./views/event-edit.js";
-import {createTripEventTemplate} from "./views/event.js";
+import {createInfoCostSectionTemplate} from "./views/info-cost-section";
+import {createInfoTemplate} from "./views/info";
+import {createCostTemplate} from "./views/cost";
+import {createMenuTemplate} from "./views/menu";
+import {createFiltersTemplate} from "./views/filters";
+import {createSortingTemplate} from "./views/sorting";
+import {createEventsListTemplate} from "./views/events-list";
+import {createFormCreateTemplate} from "./views/event-create";
+import {createFormEditTemplate} from "./views/event-edit";
+import {createEventTemplate} from "./views/event";
+import {generateWaypoint} from "./mock/waypoint";
 
-const EVENT_COUNT = 3;
+const EVENT_COUNT = 20;
+
+const events = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -23,18 +26,18 @@ const tripInfoCostSectionElement = tripMainElement.querySelector(`.trip-info`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripEventsElement = document.querySelector(`.trip-events`);
 
-render(tripInfoCostSectionElement, createTripInfoTemplate());
-render(tripInfoCostSectionElement, createTripCostTemplate());
-render(tripControlsElement, createTripMenuTemplate());
-render(tripControlsElement, createTripFiltersTemplate());
-render(tripEventsElement, createTripSortingTemplate());
-render(tripEventsElement, createTripEventsListTemplate());
+render(tripInfoCostSectionElement, createInfoTemplate(events));
+render(tripInfoCostSectionElement, createCostTemplate(events));
+render(tripControlsElement, createMenuTemplate());
+render(tripControlsElement, createFiltersTemplate());
+render(tripEventsElement, createSortingTemplate());
+render(tripEventsElement, createEventsListTemplate());
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
-render(tripEventsListElement, createTripFormCreateTemplate());
-render(tripEventsListElement, createTripFormEditTemplate());
-for (let i = 0; i < EVENT_COUNT; i++) {
-  render(tripEventsListElement, createTripEventTemplate());
+render(tripEventsListElement, createFormCreateTemplate(events[0]));
+render(tripEventsListElement, createFormEditTemplate(events[1]));
+for (let i = 2; i < EVENT_COUNT; i++) {
+  render(tripEventsListElement, createEventTemplate(events[i]));
 }
 
