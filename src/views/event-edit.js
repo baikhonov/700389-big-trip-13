@@ -1,4 +1,41 @@
-export const createFormEditTemplate = () => {
+import {createEventDestinationsTemplate, dateForForm} from "../utils";
+
+const createFormOffersTemplate = (offers) => {
+  let outputOffers = [];
+  for (const offer of offers) {
+    let checkedClassName = offer.isChecked
+      ? `checked`
+      : ``;
+
+    outputOffers.push(`
+      <div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.alias}-edit" type="checkbox" name="event-offer-${offer.alias}" ${checkedClassName}>
+        <label class="event__offer-label" for="event-offer-${offer.alias}-edit">
+          <span class="event__offer-title">${offer.title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${offer.price}</span>
+        </label>
+      </div>
+    `);
+  }
+  return outputOffers.join(``);
+};
+
+
+export const createFormEditTemplate = (event = {}) => {
+  const {
+    type,
+    destination,
+    offers,
+    description,
+    beginDate,
+    endDate,
+    price,
+  } = event;
+
+  const destinationDatalist = createEventDestinationsTemplate();
+  const offersTemplate = createFormOffersTemplate(offers);
+
   return `
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -6,7 +43,7 @@ export const createFormEditTemplate = () => {
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-edit">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-edit" type="checkbox">
 
@@ -69,22 +106,20 @@ export const createFormEditTemplate = () => {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-edit">
-              Flight
+              ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-edit" type="text" name="event-destination" value="Chamonix" list="destination-list-edit">
+            <input class="event__input  event__input--destination" id="event-destination-edit" type="text" name="event-destination" value="${destination}" list="destination-list-edit">
             <datalist id="destination-list-edit">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+              ${destinationDatalist}
             </datalist>
           </div>
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-edit">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-edit" type="text" name="event-start-time" value="18/03/19 12:25">
+            <input class="event__input  event__input--time" id="event-start-time-edit" type="text" name="event-start-time" value="${dateForForm(beginDate)}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-edit">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-edit" type="text" name="event-end-time" value="18/03/19 13:35">
+            <input class="event__input  event__input--time" id="event-end-time-edit" type="text" name="event-end-time" value="${dateForForm(endDate)}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -92,7 +127,7 @@ export const createFormEditTemplate = () => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-edit" type="text" name="event-price" value="160">
+            <input class="event__input  event__input--price" id="event-price-edit" type="text" name="event-price" value="${price}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -106,56 +141,13 @@ export const createFormEditTemplate = () => {
             <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
             <div class="event__available-offers">
-              <div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-edit" type="checkbox" name="event-offer-luggage" checked>
-                <label class="event__offer-label" for="event-offer-luggage-edit">
-                  <span class="event__offer-title">Add luggage</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">50</span>
-                </label>
-              </div>
-
-              <div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-edit" type="checkbox" name="event-offer-comfort" checked>
-                <label class="event__offer-label" for="event-offer-comfort-edit">
-                  <span class="event__offer-title">Switch to comfort</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">80</span>
-                </label>
-              </div>
-
-              <div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-edit" type="checkbox" name="event-offer-meal">
-                <label class="event__offer-label" for="event-offer-meal-edit">
-                  <span class="event__offer-title">Add meal</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">15</span>
-                </label>
-              </div>
-
-              <div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-edit" type="checkbox" name="event-offer-seats">
-                <label class="event__offer-label" for="event-offer-seats-edit">
-                  <span class="event__offer-title">Choose seats</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">5</span>
-                </label>
-              </div>
-
-              <div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-edit" type="checkbox" name="event-offer-train">
-                <label class="event__offer-label" for="event-offer-train-edit">
-                  <span class="event__offer-title">Travel by train</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">40</span>
-                </label>
-              </div>
+              ${offersTemplate}
             </div>
           </section>
 
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">Chamonix-Mont-Blanc (usually shortened to Chamonix) is a resort area near the junction of France, Switzerland and Italy. At the base of Mont Blanc, the highest summit in the Alps, it's renowned for its skiing.</p>
+            <p class="event__destination-description">${description}</p>
           </section>
         </section>
       </form>

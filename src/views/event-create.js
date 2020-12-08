@@ -1,23 +1,4 @@
-import dayjs from "dayjs";
-
-const createEventDestinationsTemplate = () => {
-  const destinations = [
-    `Tokyo`,
-    `London`,
-    `Taipei`,
-    `Singapore`,
-    `Barcelona`,
-    `New York`,
-    `Amsterdam`,
-    `Sydney`,
-    `Vienna`,
-    `Salzburg`,
-  ];
-
-  return destinations.map((destination) => `
-    <option value="${destination}"></option>
-  `).join(``);
-};
+import {createEventDestinationsTemplate, dateForForm} from "../utils";
 
 const createFormOffersTemplate = (offers) => {
   let outputOffers = [];
@@ -61,20 +42,11 @@ export const createFormCreateTemplate = (event = {}) => {
     beginDate,
     endDate,
     price,
-    isFavorite
   } = event;
 
   const destinationDatalist = createEventDestinationsTemplate();
   const offersTemplate = createFormOffersTemplate(offers);
   const imagesTemplate = createFormImagesTemplate(images);
-
-  const dateforForm = (incomeDate) => {
-    const outputDate = incomeDate !== null
-      ? dayjs(incomeDate).format(`YY/MM/DD HH:mm`)
-      : ``;
-
-    return outputDate;
-  };
 
   return `
     <li class="trip-events__item">
@@ -156,10 +128,10 @@ export const createFormCreateTemplate = (event = {}) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-create">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-create" type="text" name="event-start-time" value="${dateforForm(beginDate)}">
+            <input class="event__input  event__input--time" id="event-start-time-create" type="text" name="event-start-time" value="${dateForForm(beginDate)}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-create">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-create" type="text" name="event-end-time" value="${dateforForm(endDate)}">
+            <input class="event__input  event__input--time" id="event-end-time-create" type="text" name="event-end-time" value="${dateForForm(endDate)}">
           </div>
 
           <div class="event__field-group  event__field-group--price">

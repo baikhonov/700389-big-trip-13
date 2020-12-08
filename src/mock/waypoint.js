@@ -1,11 +1,6 @@
 import dayjs from "dayjs";
-
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
+import {getRandomInteger} from "../utils";
+import {DESTINATIONS} from "../const";
 
 const generateType = () => {
   const types = [
@@ -27,22 +22,9 @@ const generateType = () => {
 };
 
 const generateDestination = () => {
-  const destinations = [
-    `Tokyo`,
-    `London`,
-    `Taipei`,
-    `Singapore`,
-    `Barcelona`,
-    `New York`,
-    `Amsterdam`,
-    `Sydney`,
-    `Vienna`,
-    `Salzburg`,
-  ];
+  const randomIndex = getRandomInteger(0, DESTINATIONS.length - 1);
 
-  const randomIndex = getRandomInteger(0, destinations.length - 1);
-
-  return destinations[randomIndex];
+  return DESTINATIONS[randomIndex];
 };
 
 const generateOffers = () => {
@@ -96,7 +78,7 @@ const generateDescription = () => {
     `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`,
   ];
 
-  const randomLength = getRandomInteger(0, 5);
+  const randomLength = getRandomInteger(1, 5);
 
   let description = [];
   for (let i = 0; i < randomLength; i++) {
@@ -121,18 +103,18 @@ const generateImages = () => {
 };
 
 const generateBeginDate = () => {
-  const maxDaysGap = 7;
+  const maxDaysGap = 2;
   const maxHourGap = 24;
   const maxMinuteGap = 60;
-  const daysGap = getRandomInteger(-maxDaysGap, 0);
-  const hourGap = getRandomInteger(-maxHourGap, 0);
-  const minuteGap = getRandomInteger(-maxMinuteGap, 0);
+  const daysGap = getRandomInteger(-maxDaysGap, -1);
+  const hourGap = getRandomInteger(-maxHourGap, -1);
+  const minuteGap = getRandomInteger(-maxMinuteGap, -1);
 
   return dayjs().add(daysGap, `day`).add(hourGap, `hour`).add(minuteGap, `minute`).toDate();
 };
 
 const generateEndDate = () => {
-  const maxDaysGap = 7;
+  const maxDaysGap = 2;
   const maxHourGap = 24;
   const maxMinuteGap = 60;
   const daysGap = getRandomInteger(0, maxDaysGap);
@@ -159,16 +141,3 @@ export const generateWaypoint = () => {
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };
-
-// Точка маршрута (waypoint)
-// - тип точки (type)
-// - пункт назначения (destination)
-// - доп. опции (options) - список
-//    - название, цена
-// - информация о месте назначения
-//    - описание
-//    - фотографии
-// - дата и время начала события
-// - дата и время окончания события
-// - стоимость
-// - является ли избранной

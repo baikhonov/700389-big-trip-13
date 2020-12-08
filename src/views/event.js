@@ -19,8 +19,6 @@ export const createEventTemplate = (event) => {
     type,
     destination,
     offers,
-    description,
-    image,
     beginDate,
     endDate,
     price,
@@ -62,23 +60,27 @@ export const createEventTemplate = (event) => {
     return outputDate;
   };
 
-  // const calculateDuration = (firstDate, secondDate) => {
-  //   const date1 = dayjs(firstDate);
-  //   const date2 = dayjs(secondDate);
-  //   const diff = date2.diff(date1, `minute`);
-  //   let duration = ``;
-  //   if (diff < 59) {
-  //     duration = date2.diff(date1, `minute`) + 'M';
-  //   }
-  //   if (diff < 1440 && diff > 59) {
-  //     duration = date2.diff(date1, `hour`) + 'H';
-  //   }
-  //   if (diff > 1440) {
-  //     duration = date2.diff(date1, `day`) + 'D';
-  //   }
-  //
-  //   return duration;
-  // };
+  const calculateDuration = (firstDate, secondDate) => {
+    const date1 = dayjs(firstDate);
+    const date2 = dayjs(secondDate);
+    const diff = date2.diff(date1, `minute`);
+    const days = Math.floor(diff / 1440) > 0 ? Math.floor(diff / 1440) : ``;
+    let outputDays = days > 0 ? days + `D` : ``;
+    if (days < 10 && days !== ``) {
+      outputDays = `0` + outputDays;
+    }
+    const hours = Math.floor((diff - days * 1440) / 60) > 0 ? Math.floor((diff - days * 1440) / 60) : ``;
+    let outputHours = hours > 0 ? hours + `H` : ``;
+    if (hours < 10 && hours !== ``) {
+      outputHours = `0` + outputHours;
+    }
+    const minutes = (diff - days * 1440 - hours * 60) > 0 ? diff - days * 1440 - hours * 60 : ``;
+    let outputMinutes = minutes > 0 ? minutes + `M` : ``;
+    if (minutes < 10 && minutes !== ``) {
+      outputMinutes = `0` + outputMinutes;
+    }
+    return `${outputDays} ${outputHours} ${outputMinutes}`;
+  };
 
   const favoriteClassName = isFavorite
     ? `event__favorite-btn--active`
@@ -98,7 +100,7 @@ export const createEventTemplate = (event) => {
             &mdash;
             <time class="event__end-time" datetime="${timeForMachine(endDate)}">${time(endDate)}</time>
           </p>
-          <p class="event__duration">30M</p>
+          <p class="event__duration">${calculateDuration(beginDate, endDate)}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${price}</span>
