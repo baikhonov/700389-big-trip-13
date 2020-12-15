@@ -128,7 +128,7 @@ const generatePrice = () => {
   return getRandomInteger(1, 1000);
 };
 
-export const generateWaypoint = () => {
+export const generateMockEvent = () => {
   return {
     type: generateType(),
     destination: generateDestination(),
