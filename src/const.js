@@ -23,3 +23,17 @@ export const EVENT_TYPES = [
   `Sightseeing`,
   `Restaurant`,
 ];
+
+export const FILTER_TYPES = [
+  `Everything`,
+  `Future`,
+  `Past`,
+];
+
+export const SORTING_TYPES = [
+  `Day`,
+  `Event`,
+  `Time`,
+  `Price`,
+  `Offers`,
+];

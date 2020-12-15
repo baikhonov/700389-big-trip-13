@@ -5,12 +5,14 @@ export const createInfoTemplate = (events) => {
     return a.beginDate > b.beginDate ? 1 : -1;
   });
 
+  const MIN_EVENTS_COUNT = 3;
+
   const firstDateOfTrip = sortedEvents[0].beginDate;
   const lastDateOfTrip = sortedEvents[sortedEvents.length - 1].endDate;
   const outputFirstDate = dayjs(firstDateOfTrip).format(`MMM DD`);
   const outputLastDate = dayjs(lastDateOfTrip).format(`MMM DD`);
   const firstDestination = sortedEvents[0].destination;
-  const middleDestination = (sortedEvents.length === 3) ? sortedEvents[1].destination : `...`;
+  const middleDestination = (sortedEvents.length === MIN_EVENTS_COUNT) ? sortedEvents[1].destination : `...`;
   const lastDestination = sortedEvents[sortedEvents.length - 1].destination;
 
   return `
