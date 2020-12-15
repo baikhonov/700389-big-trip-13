@@ -1,6 +1,11 @@
 import {createEventDestinationsTemplate, dateForForm} from "../utils";
+import {EVENT_TYPES} from "../const";
 
 const createFormOffersTemplate = (offers) => {
+  if (offers.length === 0) {
+    return ``;
+  }
+
   let outputOffers = [];
   for (const offer of offers) {
     let checkedClassName = offer.isChecked
@@ -18,7 +23,15 @@ const createFormOffersTemplate = (offers) => {
       </div>
     `);
   }
-  return outputOffers.join(``);
+  return `
+    <section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+    <div class="event__available-offers">
+        ${outputOffers.join(``)}
+    </div>
+</section>
+  `;
 };
 
 const createFormImagesTemplate = (images) => {
@@ -29,6 +42,19 @@ const createFormImagesTemplate = (images) => {
     `);
   }
   return outputImages.join(``);
+};
+
+const createEventTypesTemplate = (types) => {
+  let outputTypes = [];
+  for (const type of types) {
+    outputTypes.push(`
+      <div class="event__type-item">
+        <input id="event-type-taxi-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-taxi-create">${type}</label>
+      </div>
+    `);
+  }
+  return outputTypes.join(``);
 };
 
 
@@ -47,6 +73,7 @@ export const createFormCreateTemplate = (event = {}) => {
   const destinationDatalist = createEventDestinationsTemplate();
   const offersTemplate = createFormOffersTemplate(offers);
   const imagesTemplate = createFormImagesTemplate(images);
+  const typesTemplate = createEventTypesTemplate(EVENT_TYPES);
 
   return `
     <li class="trip-events__item">
@@ -63,55 +90,7 @@ export const createFormCreateTemplate = (event = {}) => {
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
 
-                <div class="event__type-item">
-                  <input id="event-type-taxi-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                  <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-create">Taxi</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-bus-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                  <label class="event__type-label  event__type-label--bus" for="event-type-bus-create">Bus</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-train-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                  <label class="event__type-label  event__type-label--train" for="event-type-train-create">Train</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-ship-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                  <label class="event__type-label  event__type-label--ship" for="event-type-ship-create">Ship</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-transport-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                  <label class="event__type-label  event__type-label--transport" for="event-type-transport-create">Transport</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-drive-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                  <label class="event__type-label  event__type-label--drive" for="event-type-drive-create">Drive</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-flight-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                  <label class="event__type-label  event__type-label--flight" for="event-type-flight-create">Flight</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-check-in-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                  <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-create">Check-in</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-sightseeing-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                  <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-create">Sightseeing</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-restaurant-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                  <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-create">Restaurant</label>
-                </div>
+                ${typesTemplate}
               </fieldset>
             </div>
           </div>
@@ -146,13 +125,7 @@ export const createFormCreateTemplate = (event = {}) => {
           <button class="event__reset-btn" type="reset">Cancel</button>
         </header>
         <section class="event__details">
-          <section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-            <div class="event__available-offers">
-              ${offersTemplate}
-            </div>
-          </section>
+            ${offersTemplate}
 
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>

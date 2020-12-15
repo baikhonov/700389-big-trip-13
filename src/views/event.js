@@ -1,14 +1,14 @@
-import dayjs from "dayjs";
+import {date, dateForMachine, time, timeForMachine, calculateDuration} from "../utils";
 
 const createEventOffersTemplate = (offers) => {
   let outputOffers = [];
   for (const offer of offers) {
     outputOffers.push(`
       <li class="event__offer">
-            <span class="event__offer-title">${offer.title}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${offer.price}</span>
-          </li>
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </li>
     `);
   }
   return outputOffers.join(``);
@@ -26,61 +26,6 @@ export const createEventTemplate = (event) => {
   } = event;
 
   const offersTemplate = createEventOffersTemplate(offers);
-
-  const date = (incomeDate) => {
-    const outputDate = incomeDate !== null
-      ? dayjs(incomeDate).format(`MMM D`)
-      : ``;
-
-    return outputDate;
-  };
-
-
-  const dateForMachine = (incomeDate) => {
-    const outputDate = incomeDate !== null
-      ? dayjs(incomeDate).format(`YYYY-MM-DD`)
-      : ``;
-
-    return outputDate;
-  };
-
-  const time = (incomeDate) => {
-    const outputDate = incomeDate !== null
-      ? dayjs(incomeDate).format(`HH:mm`)
-      : ``;
-
-    return outputDate;
-  };
-
-  const timeForMachine = (incomeDate) => {
-    const outputDate = incomeDate !== null
-      ? dayjs(incomeDate).format(`YYYY-MM-DDTHH:mm`)
-      : ``;
-
-    return outputDate;
-  };
-
-  const calculateDuration = (firstDate, secondDate) => {
-    const date1 = dayjs(firstDate);
-    const date2 = dayjs(secondDate);
-    const diff = date2.diff(date1, `minute`);
-    const days = Math.floor(diff / 1440) > 0 ? Math.floor(diff / 1440) : ``;
-    let outputDays = days > 0 ? days + `D` : ``;
-    if (days < 10 && days !== ``) {
-      outputDays = `0` + outputDays;
-    }
-    const hours = Math.floor((diff - days * 1440) / 60) > 0 ? Math.floor((diff - days * 1440) / 60) : ``;
-    let outputHours = hours > 0 ? hours + `H` : ``;
-    if (hours < 10 && hours !== ``) {
-      outputHours = `0` + outputHours;
-    }
-    const minutes = (diff - days * 1440 - hours * 60) > 0 ? diff - days * 1440 - hours * 60 : ``;
-    let outputMinutes = minutes > 0 ? minutes + `M` : ``;
-    if (minutes < 10 && minutes !== ``) {
-      outputMinutes = `0` + outputMinutes;
-    }
-    return `${outputDays} ${outputHours} ${outputMinutes}`;
-  };
 
   const favoriteClassName = isFavorite
     ? `event__favorite-btn--active`
