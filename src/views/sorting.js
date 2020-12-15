@@ -1,4 +1,5 @@
 import {SORTING_TYPES} from "../const";
+import {createElement} from "../utils";
 
 const createSortingTypeTemplate = (types) => {
   if (types.length === 0) {
@@ -23,10 +24,32 @@ const createSortingTypeTemplate = (types) => {
 
 const sortingTemplate = createSortingTypeTemplate(SORTING_TYPES);
 
-export const createSortingTemplate = () => {
+const createSortingTemplate = () => {
   return `
     <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       ${sortingTemplate}
     </form>
   `;
 };
+
+export default class Sorting {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortingTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,4 @@
-import {createEventDestinationsTemplate, dateForForm} from "../utils";
+import {createEventDestinationsTemplate, dateForForm, createElement} from "../utils";
 import {EVENT_TYPES} from "../const";
 
 const createFormOffersTemplate = (offers) => {
@@ -58,7 +58,7 @@ const createEventTypesTemplate = (types) => {
 };
 
 
-export const createFormCreateTemplate = (event = {}) => {
+const createFormCreateTemplate = (event = {}) => {
   const {
     type,
     destination,
@@ -142,3 +142,26 @@ export const createFormCreateTemplate = (event = {}) => {
     </li>
   `;
 };
+
+export default class EditCreate {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFormCreateTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

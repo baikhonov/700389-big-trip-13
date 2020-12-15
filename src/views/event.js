@@ -1,4 +1,4 @@
-import {date, dateForMachine, time, timeForMachine, calculateDuration} from "../utils";
+import {date, dateForMachine, time, timeForMachine, calculateDuration, createElement} from "../utils";
 
 const createEventOffersTemplate = (offers) => {
   let outputOffers = [];
@@ -14,7 +14,7 @@ const createEventOffersTemplate = (offers) => {
   return outputOffers.join(``);
 };
 
-export const createEventTemplate = (event) => {
+const createEventTemplate = (event) => {
   const {
     type,
     destination,
@@ -67,3 +67,26 @@ export const createEventTemplate = (event) => {
     </li>
   `;
 };
+
+export default class Event {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

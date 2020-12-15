@@ -7,16 +7,20 @@ dayjs.extend(duration);
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
+  BEFORE: `before`,
   AFTER: `after`
 };
 
-export const renderElement = (container, element, place) => {
+export const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
       break;
     case RenderPosition.BEFOREEND:
       container.append(element);
+      break;
+    case RenderPosition.BEFORE:
+      container.before(element);
       break;
     case RenderPosition.AFTER:
       container.after(element);
