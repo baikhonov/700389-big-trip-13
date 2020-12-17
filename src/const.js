@@ -10,3 +10,30 @@ export const DESTINATIONS = [
   `Vienna`,
   `Salzburg`,
 ];
+
+export const EVENT_TYPES = [
+  `Taxi`,
+  `Bus`,
+  `Train`,
+  `Ship`,
+  `Transport`,
+  `Drive`,
+  `Flight`,
+  `Check-in`,
+  `Sightseeing`,
+  `Restaurant`,
+];
+
+export const FILTER_TYPES = [
+  `Everything`,
+  `Future`,
+  `Past`,
+];
+
+export const SORTING_TYPES = [
+  `Day`,
+  `Event`,
+  `Time`,
+  `Price`,
+  `Offers`,
+];

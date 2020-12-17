@@ -1,16 +1,19 @@
 import dayjs from "dayjs";
+import {createElement} from "../utils";
 
-export const createInfoTemplate = (events) => {
+const createInfoTemplate = (events) => {
   const sortedEvents = events.sort((a, b) => {
     return a.beginDate > b.beginDate ? 1 : -1;
   });
+
+  const MIN_EVENTS_COUNT = 3;
 
   const firstDateOfTrip = sortedEvents[0].beginDate;
   const lastDateOfTrip = sortedEvents[sortedEvents.length - 1].endDate;
   const outputFirstDate = dayjs(firstDateOfTrip).format(`MMM DD`);
   const outputLastDate = dayjs(lastDateOfTrip).format(`MMM DD`);
   const firstDestination = sortedEvents[0].destination;
-  const middleDestination = (sortedEvents.length === 3) ? sortedEvents[1].destination : `...`;
+  const middleDestination = (sortedEvents.length === MIN_EVENTS_COUNT) ? sortedEvents[1].destination : `...`;
   const lastDestination = sortedEvents[sortedEvents.length - 1].destination;
 
   return `
@@ -21,3 +24,27 @@ export const createInfoTemplate = (events) => {
     </div>
   `;
 };
+
+export default class Info {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createInfoTemplate(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
