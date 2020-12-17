@@ -1,11 +1,10 @@
 import InfoCostView from "./views/info-cost";
 import InfoView from "./views/info";
 import CostView from "./views/cost";
-import SiteMenuView from "./views/menu";
-import FilterView from "./views/filters";
+import MenuView from "./views/menu";
+import FilterView from "./views/filter";
 import SortingView from "./views/sorting";
 import EventsListView from "./views/events-list";
-// import EventCreateView from "./views/event-create";
 import EventEditView from "./views/event-edit";
 import EventView from "./views/event";
 import {generateMockEvent} from "./mock/event";
@@ -56,16 +55,13 @@ const tripEventsElement = document.querySelector(`.trip-events`);
 
 render(tripInfoCostSectionElement, new InfoView(events).getElement(), RenderPosition.BEFOREEND);
 render(tripInfoCostSectionElement, new CostView(events).getElement(), RenderPosition.BEFOREEND);
-render(menuTitle, new SiteMenuView().getElement(), RenderPosition.AFTER);
+render(menuTitle, new MenuView().getElement(), RenderPosition.AFTER);
 render(filtersTitle, new FilterView().getElement(), RenderPosition.AFTER);
 render(tripEventsElement, new SortingView().getElement(), RenderPosition.BEFOREEND);
 
 const EventsListComponent = new EventsListView();
 
 render(tripEventsElement, EventsListComponent.getElement(), RenderPosition.BEFOREEND);
-// render(EventsListComponent.getElement(), new FormEditView(events[0]).getElement(), RenderPosition.BEFOREEND);
 for (let i = 0; i < EVENTS_COUNT; i++) {
   renderEvent(EventsListComponent.getElement(), events[i]);
-  // render(EventsListComponent.getElement(), new EventView(events[i]).getElement(), RenderPosition.BEFOREEND);
 }
-
