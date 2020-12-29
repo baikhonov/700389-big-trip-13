@@ -1,5 +1,6 @@
-import {createEventDestinationsTemplate, dateForForm, createElement} from "../utils";
+import {createEventDestinationsTemplate, dateForForm} from "../utils/event";
 import {EVENT_TYPES} from "../const";
+import AbstractView from "./abstract";
 
 const createFormOffersTemplate = (offers) => {
   if (offers.length === 0) {
@@ -143,25 +144,14 @@ const createFormCreateTemplate = (event = {}) => {
   `;
 };
 
-export default class EditCreate {
+export default class EditCreate extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
     return createFormCreateTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

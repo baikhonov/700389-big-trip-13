@@ -1,5 +1,5 @@
 import {SORTING_TYPES} from "../const";
-import {createElement} from "../utils";
+import AbstractView from "./abstract";
 
 const createSortingTypeTemplate = (types) => {
   if (types.length === 0) {
@@ -32,24 +32,8 @@ const createSortingTemplate = () => {
   `;
 };
 
-export default class Sorting {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Sorting extends AbstractView {
   getTemplate() {
     return createSortingTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
