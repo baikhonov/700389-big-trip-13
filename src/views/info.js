@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "../utils";
+import AbstractView from "./abstract";
 
 const createInfoTemplate = (events) => {
   const sortedEvents = events.sort((a, b) => {
@@ -25,26 +25,14 @@ const createInfoTemplate = (events) => {
   `;
 };
 
-export default class Info {
+export default class Info extends AbstractView {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
     return createInfoTemplate(this._events);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
