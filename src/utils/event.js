@@ -75,3 +75,41 @@ export const calculateDuration = (firstDate, secondDate) => {
   }
   return `${outputDays} ${outputHours} ${outputMinutes}`;
 };
+
+export const sortTimeDown = (eventA, eventB) => {
+  let durationA = dayjs.duration(dayjs(eventA.endDate).diff(dayjs(eventA.beginDate)));
+  let durationB = dayjs.duration(dayjs(eventB.endDate).diff(dayjs(eventB.beginDate)));
+  if (durationB.$ms > durationA.$ms) {
+    return 1;
+  } else if (durationB.$ms < durationA.$ms) {
+    return -1;
+  }
+
+  return 0;
+
+
+};
+
+export const sortPriceDown = (eventA, eventB) => {
+
+  if (eventB.price > eventA.price) {
+    return 1;
+  } else if (eventB.price < eventA.price) {
+    return -1;
+  }
+
+  return 0;
+
+};
+
+export const sortDayUp = (eventA, eventB) => {
+
+  if (eventB.beginDate > eventA.beginDate) {
+    return -1;
+  } else if (eventB.beginDate < eventA.beginDate) {
+    return 1;
+  }
+
+  return 0;
+
+};

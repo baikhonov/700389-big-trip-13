@@ -7,6 +7,8 @@ import NoEventView from "../views/no-events";
 import EventPresenter from "./event";
 import {updateItem} from "../utils/common";
 import {render, RenderPosition} from "../utils/render";
+import {sortTimeDown, sortPriceDown, sortDayUp} from "../utils/event";
+import {SORTING_TYPES} from "../const";
 
 const EVENTS_COUNT = 20;
 const tripMainElement = document.querySelector(`.trip-main`);
@@ -15,6 +17,7 @@ export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
+    this._currentSortType = SORTING_TYPES.DEFAULT;
 
     this._InfoCostViewComponent = new InfoCostView();
     this._sortComponent = new SortingView();
@@ -23,10 +26,13 @@ export default class Trip {
 
     this._handleEventChange = this._handleEventChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(events) {
-    this._events = events.slice();
+    this._events = events.slice().sort(sortDayUp);
+    // сохраняем исходный массив точек
+    this._sourceEvents = events.slice().sort(sortDayUp);
     this._InfoViewComponent = new InfoView(this._events);
     this._CostViewComponent = new CostView(this._events);
     this._renderEvents();
@@ -43,6 +49,31 @@ export default class Trip {
     this._eventPresenter[updatedEvent.id].init(updatedEvent);
   }
 
+  _sortEvents(sortType) {
+    switch (sortType) {
+      case SORTING_TYPES.TIME:
+        this._events.sort(sortTimeDown);
+        break;
+      case SORTING_TYPES.PRICE:
+        this._events.sort(sortPriceDown);
+        break;
+      default:
+        this._events = this._sourceEvents.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortEvents(sortType);
+    this._clearEventsList();
+    this._renderEventsList();
+  }
+
   _renderInfoCost() {
     render(tripMainElement, this._InfoCostViewComponent, RenderPosition.AFTERBEGIN);
 
@@ -54,6 +85,7 @@ export default class Trip {
 
   _renderSort() {
     render(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderEvent(event) {

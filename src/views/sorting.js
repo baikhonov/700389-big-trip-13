@@ -9,15 +9,17 @@ const createSortingTypeTemplate = (types) => {
   let outputTypes = [];
   let counter = 0;
 
-  for (const type of types) {
-    outputTypes.push(`
-      <div class="trip-sort__item  trip-sort__item--${type.toLowerCase()}">
-        <input id="sort-${type.toLowerCase()}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${type.toLowerCase()}" ${counter === 0 ? `checked` : ``}>
-        <label class="trip-sort__btn" for="sort-${type.toLowerCase()}">${type}</label>
+  Object
+    .values(types)
+    .forEach((type) => {
+      outputTypes.push(`
+      <div class="trip-sort__item  trip-sort__item--${type}">
+        <input id="sort-${type}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${type}"   ${counter === 0 ? `checked` : ``}>
+        <label class="trip-sort__btn" for="sort-${type}" data-sort-type="${type}">${type}</label>
       </div>
     `);
-    counter++;
-  }
+      counter++;
+    });
 
   return outputTypes.join(``);
 };
@@ -33,7 +35,27 @@ const createSortingTemplate = () => {
 };
 
 export default class Sorting extends AbstractView {
+  constructor() {
+    super();
+
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
+  }
+
   getTemplate() {
     return createSortingTemplate();
+  }
+
+  _sortTypeChangeHandler(evt) {
+    if (evt.target.tagName !== `LABEL`) {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.sortTypeChange(evt.target.dataset.sortType);
+  }
+
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 }
