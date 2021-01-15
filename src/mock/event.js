@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
 import {getRandomInteger} from "../utils/common";
 import {DESTINATIONS} from "../const";
+import {nanoid} from 'nanoid';
+
+const generateId = () => nanoid();
 
 const generateType = () => {
   const types = [
@@ -130,6 +133,7 @@ const generatePrice = () => {
 
 export const generateMockEvent = () => {
   return {
+    id: generateId(),
     type: generateType(),
     destination: generateDestination(),
     offers: generateOffers(),
