@@ -30,10 +30,10 @@ export const FILTER_TYPES = [
   `Past`,
 ];
 
-export const SORTING_TYPES = [
-  `Day`,
-  `Event`,
-  `Time`,
-  `Price`,
-  `Offers`,
-];
+export const SORTING_TYPES = {
+  DEFAULT: `day`,
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`,
+  OFFERS: `offers`,
+};
