@@ -8,8 +8,6 @@ const EVENTS_COUNT = 20;
 
 const events = new Array(EVENTS_COUNT).fill().map(generateMockEvent);
 
-window.__events__ = events;
-
 const tripMainElement = document.querySelector(`.trip-main`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const menuTitle = tripControlsElement.querySelector(`h2:nth-child(1)`);
