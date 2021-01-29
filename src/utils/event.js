@@ -12,7 +12,7 @@ export const createEventDestinationsTemplate = () => {
 
 export const dateForForm = (incomeDate) => {
   const outputDate = incomeDate !== null
-    ? dayjs(incomeDate).format(`YY/MM/DD HH:mm`)
+    ? dayjs(incomeDate).format(`DD/MM/YY HH:mm`)
     : ``;
 
   return outputDate;
