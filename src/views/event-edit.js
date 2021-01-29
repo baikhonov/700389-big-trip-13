@@ -137,7 +137,9 @@ export default class EventEdit extends SmartView {
   constructor(event) {
     super();
     this._data = EventEdit.parseEventToData(event);
-    this._datepicker = null;
+    this._startDatepicker = null;
+    this._endDatepicker = null;
+
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
@@ -168,38 +170,23 @@ export default class EventEdit extends SmartView {
   }
 
   _setDatepicker() {
-    if (this._datepicker) {
-      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
-      // которые создает flatpickr при инициализации
-      this._datepicker.destroy();
-      this._datepicker = null;
-    }
+    this._startDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-edit`),
+        {
+          dateFormat: `d/m/y h:i`,
+          enableTime: true,
+          onChange: this._beginDateInputHandler // На событие flatpickr передаём наш колбэк
+        }
+    );
 
-    if (this._data.beginDate) {
-      // flatpickr есть смысл инициализировать только в случае,
-      // если поле выбора даты доступно для заполнения
-      this._datepicker = flatpickr(
-          this.getElement().querySelector(`#event-start-time-edit`),
-          {
-            dateFormat: `y/m/j H:i`,
-            defaultDate: this._data.beginDate,
-            onChange: this._beginDateInputHandler // На событие flatpickr передаём наш колбэк
-          }
-      );
-    }
-
-    if (this._data.endDate) {
-      // flatpickr есть смысл инициализировать только в случае,
-      // если поле выбора даты доступно для заполнения
-      this._datepicker = flatpickr(
-          this.getElement().querySelector(`#event-end-time-edit`),
-          {
-            dateFormat: `y/m/j H:i`,
-            defaultDate: this._data.endDate,
-            onChange: this._endDateInputHandler // На событие flatpickr передаём наш колбэк
-          }
-      );
-    }
+    this._endDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-edit`),
+        {
+          dateFormat: `d/m/y h:i`,
+          enableTime: true,
+          onChange: this._endDateInputHandler // На событие flatpickr передаём наш колбэк
+        }
+    );
   }
 
   _setInnerHandlers() {
@@ -209,12 +196,6 @@ export default class EventEdit extends SmartView {
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationChangeHandler);
-    this.getElement()
-      .querySelector(`#event-start-time-edit`)
-      .addEventListener(`input`, this._beginDateInputHandler);
-    this.getElement()
-      .querySelector(`#event-end-time-edit`)
-      .addEventListener(`input`, this._endDateInputHandler);
     this.getElement()
       .querySelector(`.event__input--price`)
       .addEventListener(`input`, this._priceInputHandler);
@@ -234,22 +215,16 @@ export default class EventEdit extends SmartView {
     }, true);
   }
 
-  _beginDateInputHandler([userDate]) {
-    const maxHour = 23;
-    const maxMinute = 59;
-    const maxSecond = 59;
+  _beginDateInputHandler(userDate) {
     this.updateData({
-      beginDate: dayjs(userDate).hour(getRandomInteger(0, maxHour)).minute(getRandomInteger(0, maxMinute)).second(getRandomInteger(0, maxSecond)).toDate()
-    }, true);
+      beginDate: dayjs(userDate)
+    });
   }
 
-  _endDateInputHandler([userDate]) {
-    const maxHour = 23;
-    const maxMinute = 59;
-    const maxSecond = 59;
+  _endDateInputHandler(userDate) {
     this.updateData({
-      endDate: dayjs(userDate).hour(getRandomInteger(0, maxHour)).minute(getRandomInteger(0, maxMinute)).second(getRandomInteger(0, maxSecond)).toDate()
-    }, true);
+      endDate: dayjs(userDate)
+    });
   }
 
   _priceInputHandler(evt) {
