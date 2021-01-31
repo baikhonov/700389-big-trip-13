@@ -24,16 +24,28 @@ export const EVENT_TYPES = [
   `Restaurant`,
 ];
 
-export const FILTER_TYPES = [
+export const FilterType = [
   `Everything`,
   `Future`,
   `Past`,
 ];
 
-export const SORTING_TYPES = {
+export const SortType = {
   DEFAULT: `day`,
   EVENT: `event`,
   TIME: `time`,
   PRICE: `price`,
   OFFERS: `offers`,
+};
+
+export const UserAction = {
+  UPDATE_EVENT: `UPDATE_EVENT`,
+  ADD_EVENT: `ADD_EVENT`,
+  DELETE_EVENT: `DELETE_EVENT`
+};
+
+export const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
 };

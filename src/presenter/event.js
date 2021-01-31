@@ -1,6 +1,7 @@
-import EventView from "../views/event";
-import EventEditView from "../views/event-edit";
+import EventView from "../view/event";
+import EventEditView from "../view/event-edit";
 import {render, RenderPosition, replace, remove} from "../utils/render";
+import {UserAction, UpdateType} from "../const";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -21,6 +22,7 @@ export default class Event {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmitClick = this._handleFormSubmitClick.bind(this);
     this._handleFormCloseClick = this._handleFormCloseClick.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -37,6 +39,7 @@ export default class Event {
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmitClick);
     this._eventEditComponent.setFormCloseHandler(this._handleFormCloseClick);
+    this._eventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._eventsListContainer, this._eventComponent, RenderPosition.BEFOREEND);
@@ -94,23 +97,36 @@ export default class Event {
 
   _handleFavoriteClick() {
     this._changeData(
-        Object.assign(
-            {},
-            this._event,
-            {
-              isFavorite: !this._event.isFavorite
-            }
-        )
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      Object.assign(
+        {},
+        this._event,
+        {
+          isFavorite: !this._event.isFavorite
+        }
+      )
     );
   }
 
-  _handleFormSubmitClick(event) {
-    this._changeData(event);
+  _handleFormSubmitClick(update) {
+    this._changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      update);
     this._replaceFormToEvent();
   }
 
   _handleFormCloseClick() {
     this._replaceFormToEvent();
+  }
+
+  _handleDeleteClick(event) {
+    this._changeData(
+      UserAction.DELETE_EVENT,
+      UpdateType.MINOR,
+      event
+    );
   }
 }
 

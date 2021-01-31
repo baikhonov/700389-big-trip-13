@@ -3,7 +3,6 @@ import {EVENT_TYPES} from "../const";
 import dayjs from "dayjs";
 import SmartView from "./smart";
 import flatpickr from "flatpickr";
-import {getRandomInteger} from "../utils/common";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -40,15 +39,25 @@ ${outputOffers.join(``)}
 `;
 };
 
+const createFormImagesTemplate = (images) => {
+  let outputImages = [];
+  for (const image of images) {
+    outputImages.push(`
+      <img class="event__photo" src="${image}" alt="Event photo">
+    `);
+  }
+  return outputImages.join(``);
+};
+
 const createEventTypesTemplate = (types) => {
   let outputTypes = [];
   for (const type of types) {
     outputTypes.push(`
-<div class="event__type-item">
-<input id="event-type-${type.toLowerCase()}-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
-<label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-create">${type}</label>
-</div>
-`);
+      <div class="event__type-item">
+        <input id="event-type-${type.toLowerCase()}-create" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-create">${type}</label>
+      </div>
+    `);
   }
   return outputTypes.join(``);
 };
@@ -59,6 +68,7 @@ const createFormEditTemplate = (data) => {
     destination,
     offers,
     description,
+    images,
     beginDate,
     endDate,
     price,
@@ -66,6 +76,7 @@ const createFormEditTemplate = (data) => {
 
   const destinationDatalist = createEventDestinationsTemplate();
   const offersTemplate = createFormOffersTemplate(offers);
+  const imagesTemplate = createFormImagesTemplate(images);
   const typesTemplate = createEventTypesTemplate(EVENT_TYPES);
 
   return `
@@ -126,6 +137,12 @@ const createFormEditTemplate = (data) => {
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${imagesTemplate}
+          </div>
+        </div>
       </section>
     </section>
     </form>
@@ -141,6 +158,7 @@ export default class EventEdit extends SmartView {
     this._endDatepicker = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
@@ -152,9 +170,23 @@ export default class EventEdit extends SmartView {
     this._setDatepicker();
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
+  }
+
   reset(event) {
     this.updateData(
-        EventEdit.parseEventToData(event)
+      EventEdit.parseEventToData(event)
     );
   }
 
@@ -167,25 +199,28 @@ export default class EventEdit extends SmartView {
     this._setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFormCloseHandler(this._callback.formClose);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _setDatepicker() {
     this._startDatepicker = flatpickr(
-        this.getElement().querySelector(`#event-start-time-edit`),
-        {
-          dateFormat: `d/m/y h:i`,
-          enableTime: true,
-          onChange: this._beginDateInputHandler // На событие flatpickr передаём наш колбэк
-        }
+      this.getElement().querySelector(`#event-start-time-edit`),
+      {
+        dateFormat: `d/m/y H:i`,
+        enableTime: true,
+        time_24hr: true,
+        onChange: this._beginDateInputHandler // На событие flatpickr передаём наш колбэк
+      }
     );
 
     this._endDatepicker = flatpickr(
-        this.getElement().querySelector(`#event-end-time-edit`),
-        {
-          dateFormat: `d/m/y h:i`,
-          enableTime: true,
-          onChange: this._endDateInputHandler // На событие flatpickr передаём наш колбэк
-        }
+      this.getElement().querySelector(`#event-end-time-edit`),
+      {
+        dateFormat: `d/m/y H:i`,
+        enableTime: true,
+        time_24hr: true,
+        onChange: this._endDateInputHandler // На событие flatpickr передаём наш колбэк
+      }
     );
   }
 
@@ -218,13 +253,13 @@ export default class EventEdit extends SmartView {
   _beginDateInputHandler(userDate) {
     this.updateData({
       beginDate: dayjs(userDate)
-    });
+    }, true);
   }
 
   _endDateInputHandler(userDate) {
     this.updateData({
       endDate: dayjs(userDate)
-    });
+    }, true);
   }
 
   _priceInputHandler(evt) {
@@ -254,11 +289,21 @@ export default class EventEdit extends SmartView {
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._formCloseHandler);
   }
 
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EventEdit.parseDataToEvent(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
+
   static parseEventToData(event) {
     return Object.assign(
-        {},
-        event,
-        {}
+      {},
+      event,
+      {}
     );
   }
 

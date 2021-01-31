@@ -94,9 +94,9 @@ const generateDescription = () => {
 
 const generateImages = () => {
   const image = `http://picsum.photos/248/152?r=`;
-  const randomLength = getRandomInteger(0, 5);
+  const randomLength = getRandomInteger(0, 10);
 
-  let images = [];
+  const images = [];
   for (let i = 0; i < randomLength; i++) {
     const randomNumber = getRandomInteger(1, 100);
     images.push(image + randomNumber);

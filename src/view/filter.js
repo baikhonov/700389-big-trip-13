@@ -1,4 +1,4 @@
-import {FILTER_TYPES} from "../const";
+import {FilterType} from "../const";
 import AbstractView from "./abstract";
 
 const createFilterTemplate = (filters) => {
@@ -22,7 +22,7 @@ const createFilterTemplate = (filters) => {
   return outputFilters.join(``);
 };
 
-const filterTemplate = createFilterTemplate(FILTER_TYPES);
+const filterTemplate = createFilterTemplate(FilterType);
 
 const createFiltersTemplate = () => {
 
