@@ -6,8 +6,6 @@ import SmartView from "./smart";
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import {getRandomInteger} from "../utils/common";
-import {generateId} from "../mock/event";
 
 const daysGap = 3;
 const BLANK_EVENT = {
@@ -43,8 +41,8 @@ const createFormOffersTemplate = (offers) => {
       </label>
       </div>
       `);
-        }
-        return `
+  }
+  return `
       <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -52,7 +50,7 @@ const createFormOffersTemplate = (offers) => {
       ${outputOffers.join(``)}
       </div>
       </section>
-      `;
+  `;
 };
 
 const createFormImagesTemplate = (images) => {
@@ -202,7 +200,7 @@ export default class EventEdit extends SmartView {
 
   reset(event) {
     this.updateData(
-      EventEdit.parseEventToData(event)
+        EventEdit.parseEventToData(event)
     );
   }
 
@@ -220,23 +218,23 @@ export default class EventEdit extends SmartView {
 
   _setDatepicker() {
     this._startDatepicker = flatpickr(
-      this.getElement().querySelector(`#event-start-time-edit`),
-      {
-        dateFormat: `d/m/y H:i`,
-        enableTime: true,
-        time_24hr: true,
-        onChange: this._beginDateInputHandler // На событие flatpickr передаём наш колбэк
-      }
+        this.getElement().querySelector(`#event-start-time-edit`),
+        {
+          dateFormat: `d/m/y H:i`,
+          enableTime: true,
+          TIME_24HR: true,
+          onChange: this._beginDateInputHandler // На событие flatpickr передаём наш колбэк
+        }
     );
 
     this._endDatepicker = flatpickr(
-      this.getElement().querySelector(`#event-end-time-edit`),
-      {
-        dateFormat: `d/m/y H:i`,
-        enableTime: true,
-        time_24hr: true,
-        onChange: this._endDateInputHandler // На событие flatpickr передаём наш колбэк
-      }
+        this.getElement().querySelector(`#event-end-time-edit`),
+        {
+          dateFormat: `d/m/y H:i`,
+          enableTime: true,
+          TIME_24HR: true,
+          onChange: this._endDateInputHandler // На событие flatpickr передаём наш колбэк
+        }
     );
   }
 
@@ -317,9 +315,9 @@ export default class EventEdit extends SmartView {
 
   static parseEventToData(event) {
     return Object.assign(
-      {},
-      event,
-      {}
+        {},
+        event,
+        {}
     );
   }
 

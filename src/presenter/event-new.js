@@ -43,9 +43,9 @@ export default class EventCreate {
 
   _handleFormSubmit(event) {
     this._changeData(
-      UserAction.ADD_EVENT,
-      UpdateType.MINOR,
-      Object.assign({id: generateId()}, event)
+        UserAction.ADD_EVENT,
+        UpdateType.MINOR,
+        Object.assign({id: generateId()}, event)
     );
     this.destroy();
   }

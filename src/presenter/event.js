@@ -97,23 +97,23 @@ export default class Event {
 
   _handleFavoriteClick() {
     this._changeData(
-      UserAction.UPDATE_TASK,
-      UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._event,
-        {
-          isFavorite: !this._event.isFavorite
-        }
-      )
+        UserAction.UPDATE_EVENT,
+        UpdateType.MINOR,
+        Object.assign(
+            {},
+            this._event,
+            {
+              isFavorite: !this._event.isFavorite
+            }
+        )
     );
   }
 
   _handleFormSubmitClick(update) {
     this._changeData(
-      UserAction.UPDATE_TASK,
-      UpdateType.MINOR,
-      update);
+        UserAction.UPDATE_EVENT,
+        UpdateType.MINOR,
+        update);
     this._replaceFormToEvent();
   }
 
@@ -123,9 +123,9 @@ export default class Event {
 
   _handleDeleteClick(event) {
     this._changeData(
-      UserAction.DELETE_EVENT,
-      UpdateType.MINOR,
-      event
+        UserAction.DELETE_EVENT,
+        UpdateType.MINOR,
+        event
     );
   }
 }

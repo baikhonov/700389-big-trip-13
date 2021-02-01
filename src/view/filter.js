@@ -1,9 +1,7 @@
 import AbstractView from "./abstract";
-import {FilterType} from "../const.js";
-
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
-  const {type, name} = filter;
+  const {name} = filter;
 
   return (`
       <div class="trip-filters__filter">
