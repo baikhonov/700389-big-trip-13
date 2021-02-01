@@ -3,7 +3,7 @@ import {getRandomInteger} from "../utils/common";
 import {DESTINATIONS} from "../const";
 import {nanoid} from 'nanoid';
 
-const generateId = () => nanoid();
+export const generateId = () => nanoid();
 
 const generateType = () => {
   const types = [
@@ -105,26 +105,26 @@ const generateImages = () => {
   return images;
 };
 
-const generateBeginDate = () => {
+const generateDate = () => {
   const maxDaysGap = 7;
   const maxHourGap = 24;
   const maxMinuteGap = 60;
-  const daysGap = getRandomInteger(-maxDaysGap, -1);
-  const hourGap = getRandomInteger(-maxHourGap, -1);
-  const minuteGap = getRandomInteger(-maxMinuteGap, -1);
+  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+  const hourGap = getRandomInteger(-maxHourGap, maxHourGap);
+  const minuteGap = getRandomInteger(-maxMinuteGap, maxMinuteGap);
 
   return dayjs().add(daysGap, `day`).add(hourGap, `hour`).add(minuteGap, `minute`).toDate();
 };
 
-const generateEndDate = () => {
+const generateEndDate = (beginDate) => {
   const maxDaysGap = 7;
   const maxHourGap = 24;
   const maxMinuteGap = 60;
-  const daysGap = getRandomInteger(0, maxDaysGap);
+  const daysGap = getRandomInteger(1, maxDaysGap);
   const hourGap = getRandomInteger(-maxHourGap, 0);
   const minuteGap = getRandomInteger(-maxMinuteGap, 0);
 
-  return dayjs().add(daysGap, `day`).add(hourGap, `hour`).add(minuteGap, `minute`).toDate();
+  return dayjs(beginDate).add(daysGap, `day`).add(hourGap, `hour`).add(minuteGap, `minute`).toDate();
 };
 
 const generatePrice = () => {
@@ -132,6 +132,9 @@ const generatePrice = () => {
 };
 
 export const generateMockEvent = () => {
+  const beginDate = generateDate();
+  const endDate = generateEndDate(beginDate);
+
   return {
     id: generateId(),
     type: generateType(),
@@ -139,8 +142,8 @@ export const generateMockEvent = () => {
     offers: generateOffers(),
     description: generateDescription(),
     images: generateImages(),
-    beginDate: generateBeginDate(),
-    endDate: generateEndDate(),
+    beginDate,
+    endDate,
     price: generatePrice(),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };

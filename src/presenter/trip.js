@@ -5,15 +5,18 @@ import SortingView from "../view/sorting";
 import EventsListView from "../view/events-list";
 import NoEventView from "../view/no-events";
 import EventPresenter from "./event";
+import EventNewPresenter from "./event-new";
 import {render, RenderPosition, remove} from "../utils/render";
 import {sortTimeDown, sortPriceDown, sortDayUp} from "../utils/event";
-import {SortType, UpdateType, UserAction} from "../const";
+import {filter} from "../utils/filter.js";
+import {SortType, UpdateType, UserAction, FilterType} from "../const";
 
 const tripMainElement = document.querySelector(`.trip-main`);
 
 export default class Trip {
-  constructor(tripContainer, eventsModel) {
+  constructor(tripContainer, eventsModel, filterModel) {
     this._eventsModel = eventsModel;
+    this._filterModel = filterModel;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortType.DEFAULT;
@@ -31,6 +34,9 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
+    this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this._handleViewAction);
   }
 
   init() {
@@ -39,18 +45,29 @@ export default class Trip {
     this._renderBoard();
   }
 
+  createEvent() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._eventNewPresenter.init();
+  }
+
   _getEvents() {
+    const filterType = this._filterModel.getFilter();
+    const events = this._eventsModel.getEvents();
+    const filteredTasks = filter[filterType](events);
+
     switch (this._currentSortType) {
       case SortType.TIME:
-        return this._eventsModel.getEvents().slice().sort(sortTimeDown);
+        return filteredTasks.sort(sortTimeDown);
       case SortType.PRICE:
-        return this._eventsModel.getEvents().slice().sort(sortPriceDown);
+        return filteredTasks.sort(sortPriceDown);
     }
 
-    return this._eventsModel.getEvents().slice().sort(sortDayUp);
+    return filteredTasks.sort(sortDayUp);
   }
 
   _handleModeChange() {
+    this._eventNewPresenter.destroy();
     Object
       .values(this._eventPresenter)
       .forEach((presenter) => presenter.resetView());
@@ -131,6 +148,7 @@ export default class Trip {
   }
 
   _clearBoard({resetSortType = false} = {}) {
+    this._eventNewPresenter.destroy();
     Object
       .values(this._eventPresenter)
       .forEach((presenter) => presenter.destroy());

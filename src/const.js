@@ -24,11 +24,11 @@ export const EVENT_TYPES = [
   `Restaurant`,
 ];
 
-export const FilterType = [
-  `Everything`,
-  `Future`,
-  `Past`,
-];
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
 
 export const SortType = {
   DEFAULT: `day`,
@@ -49,3 +49,4 @@ export const UpdateType = {
   MINOR: `MINOR`,
   MAJOR: `MAJOR`
 };
+

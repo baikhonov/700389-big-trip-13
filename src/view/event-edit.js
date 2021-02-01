@@ -1,13 +1,29 @@
 import {createEventDestinationsTemplate, dateForForm} from "../utils/event";
 import {EVENT_TYPES} from "../const";
 import dayjs from "dayjs";
+import he from "he";
 import SmartView from "./smart";
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import {getRandomInteger} from "../utils/common";
+import {generateId} from "../mock/event";
+
+const daysGap = 3;
+const BLANK_EVENT = {
+  type: `taxi`,
+  destination: ``,
+  offers: [],
+  description: ``,
+  images: [],
+  beginDate: dayjs(),
+  endDate: dayjs().add(daysGap, `day`),
+  price: ``,
+  isFavorite: false,
+};
 
 const createFormOffersTemplate = (offers) => {
-  if (offers.length === 0) {
+  if (!offers) {
     return ``;
   }
 
@@ -18,25 +34,25 @@ const createFormOffersTemplate = (offers) => {
       : ``;
 
     outputOffers.push(`
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.alias}-edit" type="checkbox" name="event-offer-${offer.alias}" ${checkedClassName}>
-<label class="event__offer-label" for="event-offer-${offer.alias}-edit">
-  <span class="event__offer-title">${offer.title}</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">${offer.price}</span>
-</label>
-</div>
-`);
-  }
-  return `
-<section class="event__section  event__section--offers">
-<h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.alias}-edit" type="checkbox" name="event-offer-${offer.alias}" ${checkedClassName}>
+      <label class="event__offer-label" for="event-offer-${offer.alias}-edit">
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </label>
+      </div>
+      `);
+        }
+        return `
+      <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-<div class="event__available-offers">
-${outputOffers.join(``)}
-</div>
-</section>
-`;
+      <div class="event__available-offers">
+      ${outputOffers.join(``)}
+      </div>
+      </section>
+      `;
 };
 
 const createFormImagesTemplate = (images) => {
@@ -103,7 +119,7 @@ const createFormEditTemplate = (data) => {
         <label class="event__label  event__type-output" for="event-destination-edit">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-edit" type="text" name="event-destination" value="${destination}" list="destination-list-edit">
+        <input class="event__input  event__input--destination" id="event-destination-edit" type="text" name="event-destination" value="${he.encode(destination)}" list="destination-list-edit">
         <datalist id="destination-list-edit">
           ${destinationDatalist}
         </datalist>
@@ -122,7 +138,7 @@ const createFormEditTemplate = (data) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-edit" type="text" name="event-price" value="${price}">
+        <input class="event__input  event__input--price" id="event-price-edit" type="number" name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -151,7 +167,7 @@ const createFormEditTemplate = (data) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event) {
+  constructor(event = BLANK_EVENT) {
     super();
     this._data = EventEdit.parseEventToData(event);
     this._startDatepicker = null;
