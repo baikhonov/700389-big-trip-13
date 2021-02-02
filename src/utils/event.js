@@ -113,3 +113,11 @@ export const sortDayUp = (eventA, eventB) => {
   return 0;
 
 };
+
+export const isEventInPast = (targetDate) => {
+  return dayjs().isAfter(dayjs(targetDate));
+};
+
+export const isEventInFuture = (targetDate) => {
+  return dayjs().isBefore(dayjs(targetDate));
+};
