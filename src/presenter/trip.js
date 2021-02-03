@@ -9,7 +9,7 @@ import EventNewPresenter from "./event-new";
 import {render, RenderPosition, remove} from "../utils/render";
 import {sortTimeDown, sortPriceDown, sortDayUp} from "../utils/event";
 import {filter} from "../utils/filter.js";
-import {SortType, UpdateType, UserAction, FilterType} from "../const";
+import {SortType, UpdateType, UserAction} from "../const";
 
 const tripMainElement = document.querySelector(`.trip-main`);
 
@@ -33,8 +33,6 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._eventsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
 
     this._eventNewPresenter = new EventNewPresenter(this._eventsListComponent, this._handleViewAction);
   }
@@ -42,13 +40,26 @@ export default class Trip {
   init() {
     this._InfoViewComponent = new InfoView(this._getEvents().slice().sort(sortDayUp));
     this._CostViewComponent = new CostView(this._getEvents());
+
+    this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
     this._renderBoard();
   }
 
-  createEvent() {
-    this._currentSortType = SortType.DEFAULT;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._eventNewPresenter.init();
+  destroy() {
+    this._clearBoard({resetSortType: true});
+
+    remove(this._eventsListComponent);
+    remove(this._InfoViewComponent);
+    remove(this._CostViewComponent);
+
+    this._eventsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+  }
+
+  createEvent(callback) {
+    this._eventNewPresenter.init(callback);
   }
 
   _getEvents() {
