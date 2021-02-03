@@ -128,7 +128,7 @@ export default class Statistics extends SmartView {
         }
       }
     });
-  };
+  }
 
   _renderTypeChart(typeCtx, events) {
     const getEventsTypeRepeat = (eventsType) => {
@@ -208,7 +208,7 @@ export default class Statistics extends SmartView {
         }
       }
     });
-  };
+  }
 
   _renderTimeSpendChart(timeCtx, events) {
     const getEventsTypeTime = (eventType) => {
@@ -301,7 +301,7 @@ export default class Statistics extends SmartView {
         }
       }
     });
-  };
+  }
 
   removeElement() {
     super.removeElement();
