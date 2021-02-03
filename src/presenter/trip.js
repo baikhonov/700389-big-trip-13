@@ -3,6 +3,7 @@ import InfoView from "../view/info";
 import CostView from "../view/cost";
 import SortingView from "../view/sorting";
 import EventsListView from "../view/events-list";
+import LoadingView from "../view/loading";
 import NoEventView from "../view/no-events";
 import EventPresenter from "./event";
 import EventNewPresenter from "./event-new";
@@ -20,12 +21,14 @@ export default class Trip {
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortType.DEFAULT;
+    this._isLoading = true;
 
     this._sortComponent = null;
 
     this._InfoCostViewComponent = new InfoCostView();
     this._eventsListComponent = new EventsListView();
     this._noEventComponent = new NoEventView();
+    this._loadingComponent = new LoadingView();
 
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -111,6 +114,11 @@ export default class Trip {
         this._clearBoard({resetSortType: true});
         this._renderBoard();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderBoard();
+        break;
     }
   }
 
@@ -154,6 +162,10 @@ export default class Trip {
     events.forEach((event) => this._renderEvent(event));
   }
 
+  _renderLoading() {
+    render(this._tripContainer, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderNoEvents() {
     render(this._tripContainer, this._noEventComponent, RenderPosition.BEFOREEND);
   }
@@ -167,6 +179,7 @@ export default class Trip {
 
     remove(this._sortComponent);
     remove(this._noEventComponent);
+    remove(this._loadingComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -174,13 +187,18 @@ export default class Trip {
   }
 
   _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const events = this._getEvents();
     const eventsCount = events.length;
     if (eventsCount === 0) {
       this._renderNoEvents();
-      remove(this._InfoCostViewComponent);
-      remove(this._CostViewComponent);
-      remove(this._InfoViewComponent);
+      // remove(this._InfoCostViewComponent);
+      // remove(this._CostViewComponent);
+      // remove(this._InfoViewComponent);
       return;
     }
 

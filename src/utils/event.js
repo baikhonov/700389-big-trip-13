@@ -1,6 +1,7 @@
 import {DESTINATIONS} from "../const";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import { nanoid } from 'nanoid';
 
 dayjs.extend(duration);
 
@@ -121,3 +122,5 @@ export const isEventInPast = (targetDate) => {
 export const isEventInFuture = (targetDate) => {
   return dayjs().isBefore(dayjs(targetDate));
 };
+
+export const generateId = () => nanoid();

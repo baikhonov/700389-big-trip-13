@@ -1,27 +1,26 @@
-import MenuView from "./view/menu";
-import StatisticsView from "./view/statistics";
-import {generateMockEvent} from "./mock/event";
-import TripPresenter from "./presenter/trip";
-import FilterPresenter from "./presenter/filter";
-import EventsModel from "./model/events";
-import FilterModel from "./model/filter";
-import {render, RenderPosition, remove} from "./utils/render";
-import {MenuItem, UpdateType, FilterType} from "./const";
+import MenuView from './view/menu';
+import StatisticsView from './view/statistics';
+import TripPresenter from './presenter/trip';
+import FilterPresenter from './presenter/filter';
+import EventsModel from './model/events';
+import FilterModel from './model/filter';
+import { render, RenderPosition, remove } from './utils/render';
+import { MenuItem, UpdateType, FilterType } from './const';
+import Api from './api.js';
 
-const EVENTS_COUNT = 20;
-
-const events = new Array(EVENTS_COUNT).fill().map(generateMockEvent);
-
-const eventsModel = new EventsModel();
-eventsModel.setEvents(events);
-
-const filterModel = new FilterModel();
+const AUTHORIZATION = `Basic 2s395ckljdfgllkmv`;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 
 const tripMainElement = document.querySelector(`.trip-main`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const menuTitle = tripControlsElement.querySelector(`h2:nth-child(1)`);
 const filtersTitle = tripControlsElement.querySelector(`h2:nth-child(2)`);
 const tripEventsElement = document.querySelector(`.trip-events`);
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+const eventsModel = new EventsModel();
+const filterModel = new FilterModel();
 
 const siteMenuComponent = new MenuView();
 
@@ -56,6 +55,14 @@ siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 filterPresenter.init();
 tripPresenter.init();
+
+api.getEvents()
+  .then((events) => {
+    eventsModel.setEvents(UpdateType.INIT, events);
+  })
+  .catch(() => {
+    eventsModel.setEvents(UpdateType.INIT, []);
+  });
 
 document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
   evt.preventDefault();

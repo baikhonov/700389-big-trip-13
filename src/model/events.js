@@ -1,4 +1,4 @@
-import Observer from "../utils/observer";
+import Observer from '../utils/observer';
 
 export default class Events extends Observer {
   constructor() {
@@ -6,8 +6,10 @@ export default class Events extends Observer {
     this._events = [];
   }
 
-  setEvents(events) {
+  setEvents(updateType, events) {
     this._events = events.slice();
+
+    this.notify(updateType);
   }
 
   getEvents() {
@@ -52,6 +54,47 @@ export default class Events extends Observer {
     ];
 
     this.notify(updateType);
+  }
+
+  static adaptToClient(event) {
+    const adaptedTask = Object.assign(
+      {},
+      event,
+      {
+        beginDate: event.date_from !== null ? new Date(event.date_from) : event.date_from, // На клиенте дата хранится как экземпляр Date
+        endDate: event.date_to !== null ? new Date(event.date_to) : event.date_to, // На клиенте дата хранится как экземпляр Date
+        price: event.base_price,
+        isFavorite: event.is_favorite
+      }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedTask.date_from;
+    delete adaptedTask.date_to;
+    delete adaptedTask.base_price;
+
+    return adaptedTask;
+  }
+
+  static adaptToServer(event) {
+    const adaptedTask = Object.assign(
+      {},
+      event,
+      {
+        'date_from': event.beginDate instanceof Date ? event.beginDate.toISOString() : null, // На сервере дата хранится в ISO формате
+        'date_to': event.endDate instanceof Date ? event.endDate.toISOString() : null, // На сервере дата хранится в ISO формате
+        'base_price': event.price,
+        'is_favorite': event.isFavorite
+      }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedTask.beginDate;
+    delete adaptedTask.endDate;
+    delete adaptedTask.price;
+    delete adaptedTask.isFavorite;
+
+    return adaptedTask;
   }
 
 }
